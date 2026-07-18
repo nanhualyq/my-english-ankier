@@ -19,6 +19,14 @@ export interface MyRPCSchema extends ElectrobunRPCSchema {
 				params: void;
 				response: Article[];
 			};
+			"get-article": {
+				params: { id: number };
+				response: Article;
+			};
+			"update-article": {
+				params: { id: number; title: string; url: string; content: string };
+				response: void;
+			};
 		};
 		messages: {};
 	};

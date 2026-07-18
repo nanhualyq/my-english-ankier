@@ -32,3 +32,21 @@ export function saveArticle(
 export function getArticles(): Article[] {
 	return db.query("SELECT * FROM articles ORDER BY created_at DESC").all() as Article[];
 }
+
+export function getArticle(id: number): Article {
+	return db.query("SELECT * FROM articles WHERE id = $id").get({ $id: id }) as Article;
+}
+
+export function updateArticle(
+	id: number,
+	title: string,
+	url: string,
+	content: string,
+): void {
+	db.query("UPDATE articles SET title = $title, url = $url, content = $content WHERE id = $id").run({
+		$id: id,
+		$title: title,
+		$url: url,
+		$content: content,
+	});
+}

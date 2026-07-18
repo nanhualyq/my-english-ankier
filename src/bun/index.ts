@@ -1,6 +1,6 @@
 import { BrowserWindow, Updater, defineElectrobunRPC } from "electrobun/bun";
 import type { MyRPCSchema } from "../shared/rpcSchema";
-import { saveArticle, getArticles } from "./db";
+import { saveArticle, getArticles, getArticle, updateArticle } from "./db";
 
 const DEV_SERVER_PORT = 5173;
 const DEV_SERVER_URL = `http://localhost:${DEV_SERVER_PORT}`;
@@ -30,6 +30,9 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 			"save-article": async ({ title, url, content }) =>
 				saveArticle(title, url, content),
 			"get-articles": async () => getArticles(),
+			"get-article": async ({ id }) => getArticle(id),
+			"update-article": async ({ id, title, url, content }) =>
+				updateArticle(id, title, url, content),
 		},
 	},
 });

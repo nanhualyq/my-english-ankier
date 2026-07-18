@@ -24,18 +24,27 @@ function Home() {
 					</Link>
 				</div>
 
-				<div className="space-y-4">
-					{articles.map((a) => (
-						<div key={a.id} className="bg-white rounded-xl shadow-xl p-6">
-							<h2 className="text-xl font-semibold text-indigo-600 mb-1">
-								{a.title}
-							</h2>
-							{a.url && (
-								<p className="text-sm text-gray-500 mb-2 truncate">{a.url}</p>
-							)}
-							<p className="text-gray-700 line-clamp-3">{a.content}</p>
-						</div>
-					))}
+				<div className="bg-white rounded-xl shadow-xl overflow-hidden">
+					<table className="w-full">
+						<thead>
+							<tr className="bg-indigo-50">
+								<th className="text-left px-6 py-3 text-sm font-semibold text-indigo-600">Title</th>
+								<th className="text-left px-6 py-3 text-sm font-semibold text-indigo-600">Time</th>
+							</tr>
+						</thead>
+						<tbody className="divide-y divide-gray-100">
+							{articles.map((a) => (
+								<tr key={a.id} className="hover:bg-gray-50 transition-colors">
+									<td className="px-6 py-4">
+										<Link to={`/edit-article/${a.id}`} className="text-indigo-600 hover:text-indigo-800 font-medium">
+											{a.title}
+										</Link>
+									</td>
+									<td className="px-6 py-4 text-sm text-gray-500">{a.created_at}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
