@@ -1,4 +1,6 @@
-import { BrowserWindow, Updater } from "electrobun/bun";
+import { BrowserWindow, Updater, defineElectrobunRPC } from "electrobun/bun";
+import type { MyRPCSchema } from "../shared/rpcSchema";
+import { saveArticle, getArticles } from "./db";
 
 const DEV_SERVER_PORT = 5173;
 const DEV_SERVER_URL = `http://localhost:${DEV_SERVER_PORT}`;
@@ -20,8 +22,17 @@ async function getMainViewUrl(): Promise<string> {
 	return "views://mainview/index.html";
 }
 
-// Create the main application window
 const url = await getMainViewUrl();
+
+const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
+	handlers: {
+		requests: {
+			"save-article": async ({ title, url, content }) =>
+				saveArticle(title, url, content),
+			"get-articles": async () => getArticles(),
+		},
+	},
+});
 
 const mainWindow = new BrowserWindow({
 	title: "React + Tailwind + Vite",
@@ -33,5 +44,8 @@ const mainWindow = new BrowserWindow({
 		y: 200,
 	},
 });
+
+const transport = mainWindow.webview.createTransport();
+rpc.setTransport(transport);
 
 console.log("React Tailwind Vite app started!");
