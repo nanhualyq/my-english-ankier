@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRPC } from "../RPCContext";
 import ArticleForm from "../components/ArticleForm";
+import type { ArticleFormData } from "../../shared/rpcSchema";
 
 function AddArticle() {
 	const rpc = useRPC();
 	const navigate = useNavigate();
 	const [submitted, setSubmitted] = useState(false);
 
-	async function handleSubmit(data: { title: string; url: string; content: string }) {
+	async function handleSubmit(data: ArticleFormData) {
 		await rpc.request("save-article", data);
 		setSubmitted(true);
 		setTimeout(() => navigate("/"), 1500);

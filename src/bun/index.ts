@@ -27,12 +27,12 @@ const url = await getMainViewUrl();
 const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 	handlers: {
 		requests: {
-			"save-article": async ({ title, url, content }) =>
-				saveArticle(title, url, content),
+			"save-article": async (data) =>
+				saveArticle(data),
 			"get-articles": async () => getArticles(),
 			"get-article": async ({ id }) => getArticle(id),
-			"update-article": async ({ id, title, url, content }) =>
-				updateArticle(id, title, url, content),
+			"update-article": async ({ id, ...data }) =>
+				updateArticle(id, data),
 			"add-anki-note": async ({ front, back, title, url, deckName, modelName }) => {
 				try {
 					const response = await fetch("http://localhost:8765", {
@@ -79,4 +79,4 @@ const mainWindow = new BrowserWindow({
 const transport = mainWindow.webview.createTransport();
 rpc.setTransport(transport);
 
-console.log("React Tailwind Vite app started!");
+console.log("The app started!");

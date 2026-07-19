@@ -5,14 +5,17 @@ export interface Article {
 	title: string;
 	url: string;
 	content: string;
+	translated_content: string | null;
 	created_at: string;
 }
+
+export type ArticleFormData = Omit<Article, "id" | "created_at">;
 
 export interface MyRPCSchema extends ElectrobunRPCSchema {
 	bun: {
 		requests: {
 			"save-article": {
-				params: { title: string; url: string; content: string };
+				params: ArticleFormData;
 				response: { id: number };
 			};
 			"get-articles": {
@@ -24,7 +27,7 @@ export interface MyRPCSchema extends ElectrobunRPCSchema {
 				response: Article;
 			};
 			"update-article": {
-				params: { id: number; title: string; url: string; content: string };
+				params: { id: number } & ArticleFormData;
 				response: void;
 			};
 			"add-anki-note": {

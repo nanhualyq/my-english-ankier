@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRPC } from "../RPCContext";
 import ArticleForm from "../components/ArticleForm";
+import type { Article, ArticleFormData } from "../../shared/rpcSchema";
 
 function EditArticle() {
 	const rpc = useRPC();
 	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
-	const [article, setArticle] = useState<{ title: string; url: string; content: string } | null>(null);
+	const [article, setArticle] = useState<Article | null>(null);
 	const [submitted, setSubmitted] = useState(false);
 
 	useEffect(() => {
 		rpc.request("get-article", { id: Number(id) }).then(setArticle);
 	}, [id, rpc]);
 
-	async function handleSubmit(data: { title: string; url: string; content: string }) {
+	async function handleSubmit(data: ArticleFormData) {
 		await rpc.request("update-article", { id: Number(id), ...data });
 		setSubmitted(true);
 		setTimeout(() => navigate("/"), 1500);
@@ -36,6 +37,7 @@ function EditArticle() {
 						defaultTitle={article.title}
 						defaultUrl={article.url}
 						defaultContent={article.content}
+						defaultTranslatedContent={article.translated_content ?? ""}
 						buttonText="Update"
 						onSubmit={handleSubmit}
 					/>

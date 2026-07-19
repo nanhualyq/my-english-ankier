@@ -1,24 +1,28 @@
 import type { FormEvent } from "react";
 import { useRef } from "react";
+import type { ArticleFormData } from "../../shared/rpcSchema";
 
 interface ArticleFormProps {
 	defaultTitle?: string;
 	defaultUrl?: string;
 	defaultContent?: string;
+	defaultTranslatedContent?: string;
 	buttonText: string;
-	onSubmit: (data: { title: string; url: string; content: string }) => void;
+	onSubmit: (data: ArticleFormData) => void;
 }
 
 function ArticleForm({
 	defaultTitle = "",
 	defaultUrl = "",
 	defaultContent = "",
+	defaultTranslatedContent = "",
 	buttonText,
 	onSubmit,
 }: ArticleFormProps) {
 	const titleRef = useRef<HTMLInputElement>(null);
 	const urlRef = useRef<HTMLInputElement>(null);
 	const contentRef = useRef<HTMLTextAreaElement>(null);
+	const translatedContentRef = useRef<HTMLTextAreaElement>(null);
 
 	function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -26,6 +30,7 @@ function ArticleForm({
 			title: titleRef.current!.value,
 			url: urlRef.current!.value,
 			content: contentRef.current!.value,
+			translated_content: translatedContentRef.current!.value,
 		});
 	}
 
@@ -67,6 +72,17 @@ function ArticleForm({
 					defaultValue={defaultContent}
 					className="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
 					placeholder="Paste article content here..."
+				/>
+			</div>
+			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-1">
+					Translated Content
+				</label>
+				<textarea
+					ref={translatedContentRef}
+					defaultValue={defaultTranslatedContent}
+					className="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
+					placeholder="Paste translated content here (optional)..."
 				/>
 			</div>
 			<button
