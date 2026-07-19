@@ -38,7 +38,7 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 });
 
 const mainWindow = new BrowserWindow({
-	title: "React + Tailwind + Vite",
+	title: "my-english-ankier",
 	url,
 	frame: {
 		width: 900,

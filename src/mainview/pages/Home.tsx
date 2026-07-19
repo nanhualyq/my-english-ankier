@@ -30,6 +30,7 @@ function Home() {
 							<tr className="bg-indigo-50">
 								<th className="text-left px-6 py-3 text-sm font-semibold text-indigo-600">Title</th>
 								<th className="text-left px-6 py-3 text-sm font-semibold text-indigo-600">Time</th>
+								<th className="text-left px-6 py-3 text-sm font-semibold text-indigo-600">Read</th>
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-gray-100">
@@ -41,6 +42,11 @@ function Home() {
 										</Link>
 									</td>
 									<td className="px-6 py-4 text-sm text-gray-500">{a.created_at}</td>
+									<td className="px-6 py-4">
+										<Link to={`/read-article/${a.id}`} className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+											Read
+										</Link>
+									</td>
 								</tr>
 							))}
 						</tbody>
