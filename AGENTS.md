@@ -20,7 +20,7 @@ Electrobun (NOT Electron) desktop app — Bun runtime, React 18, Tailwind CSS 3,
 
 ## Architecture
 
-- **Main process (Bun)**: `src/bun/index.ts` — creates `BrowserWindow`, probes Vite dev server for HMR
+- **Main process (Bun)**: `src/bun/index.ts` — creates `BrowserWindow`, probes Vite dev server for HMR. `src/bun/db.ts` — SQLite CRUD for articles.
 - **View (React)**: `src/mainview/` — Vite root, entry at `index.html` → `main.tsx` → `App.tsx`
 - **Import patterns**:
   - `import { BrowserWindow, defineElectrobunRPC } from "electrobun/bun"` (main process)
@@ -33,8 +33,25 @@ Electrobun (NOT Electron) desktop app — Bun runtime, React 18, Tailwind CSS 3,
 
 | Path | Component | Description |
 |---|---|---|
-| `/` | `Home.tsx` | Lists articles from DB, link to add |
+| `/` | `Home.tsx` | Lists articles from DB |
 | `/add-article` | `AddArticle.tsx` | Form with title, url, content |
+| `/edit-article/:id` | `EditArticle.tsx` | Edit existing article |
+| `/read-article/:id` | `ReadArticle.tsx` | Read article with text selection for Anki card creation |
+
+## Anki Integration
+
+**Always use AnkiConnect** for any Anki interaction. Docs: https://git.sr.ht/~foosoft/anki-connect
+
+- AnkiConnect runs an HTTP server on `localhost:8765` (only when Anki is open)
+- All requests are `POST` with JSON body: `{ "action": "<action>", "version": 6, "params": {} }`
+- Response: `{ "result": <value>, "error": null|string }`
+- Key actions for this app:
+  - `createDeck` — create a deck (idempotent, won't overwrite existing)
+  - `addNote` — create a flashcard (params: `{ note: { deckName, modelName, fields, tags } }`)
+  - `storeMediaFile` — attach audio/images to notes
+  - `modelNames` / `deckNames` — list available note types and decks
+- AnkiConnect must be installed in Anki (add-on code: `2055492159`)
+- Communication should happen from the **main process** (`src/bun/`) via `fetch("http://localhost:8765", ...)` — not from the renderer
 
 ## Conventions
 

@@ -27,6 +27,10 @@ export interface MyRPCSchema extends ElectrobunRPCSchema {
 				params: { id: number; title: string; url: string; content: string };
 				response: void;
 			};
+			"add-anki-note": {
+				params: { front: string; back: string; title: string; url: string; deckName: string; modelName: string };
+				response: { noteId: number | null };
+			};
 		};
 		messages: {};
 	};

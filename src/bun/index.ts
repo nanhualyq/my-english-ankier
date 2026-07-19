@@ -33,6 +33,34 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 			"get-article": async ({ id }) => getArticle(id),
 			"update-article": async ({ id, title, url, content }) =>
 				updateArticle(id, title, url, content),
+			"add-anki-note": async ({ front, back, title, url, deckName, modelName }) => {
+				try {
+					const response = await fetch("http://localhost:8765", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							action: "guiAddCards",
+							version: 6,
+							params: {
+								note: {
+									deckName,
+									modelName,
+									fields: { Front: front, Back: back, Title: title, Url: url },
+								},
+							},
+						}),
+					});
+					const data = await response.json();
+					if (data.error) {
+						console.error("AnkiConnect error:", data.error);
+						return { noteId: null };
+					}
+					return { noteId: data.result };
+				} catch (err) {
+					console.error("Failed to connect to AnkiConnect:", err);
+					return { noteId: null };
+				}
+			},
 		},
 	},
 });
