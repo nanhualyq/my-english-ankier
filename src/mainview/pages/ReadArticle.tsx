@@ -19,8 +19,11 @@ function ReadArticle() {
 		const result = getCachedSelection();
 		if (!result) return;
 
+		const frontContent = stripMarks ? result.line : result.markedLine;
+		const frontWithTimestamp = `${frontContent}<span style="display:none">${Date.now()}</span>`;
+
 		rpc.request("add-anki-note", {
-			front: stripMarks ? result.line : result.markedLine,
+			front: frontWithTimestamp,
 			back: "",
 			title: article.title,
 			url: article.url,
