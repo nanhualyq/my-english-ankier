@@ -2,7 +2,7 @@ import { useArticlePage } from "../hooks/useArticlePage";
 import { ArticleHeader } from "../components/ArticleHeader";
 import { SelectionToolbar } from "../components/SelectionToolbar";
 
-function ReadArticle() {
+function WriteSkill() {
 	const { article, hasSelection, addNote } = useArticlePage();
 
 	return (
@@ -14,9 +14,19 @@ function ReadArticle() {
 					<div className="container mx-auto max-w-3xl">
 						<article className="bg-white rounded-xl shadow-xl p-8">
 							<div className="prose prose-lg max-w-none text-gray-700">
-								{article.content.split("\n").map((line, i) => (
-									<p key={i}>{line}</p>
-								))}
+								{(() => {
+									const translatedLines = article.translated_content?.split("\n") ?? [];
+									const contentLines = article.content.split("\n");
+									return translatedLines.map((line, i) => (
+										<div key={i} className="mb-2">
+											<p>{line}</p>
+											<details className="text-sm text-gray-500">
+												<summary className="cursor-pointer hover:text-gray-700">Show original</summary>
+												<p className="mt-1 pl-4 border-l-2 border-gray-200">{contentLines[i]}</p>
+											</details>
+										</div>
+									));
+								})()}
 							</div>
 						</article>
 					</div>
@@ -28,4 +38,4 @@ function ReadArticle() {
 	);
 }
 
-export default ReadArticle;
+export default WriteSkill;
