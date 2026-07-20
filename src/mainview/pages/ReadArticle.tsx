@@ -1,59 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useRPC } from "../RPCContext";
+import { useTextSelection } from "../hooks/useTextSelection";
 import type { Article } from "../../shared/rpcSchema";
 
 function ReadArticle() {
 	const rpc = useRPC();
 	const { id } = useParams<{ id: string }>();
 	const [article, setArticle] = useState<Article | null>(null);
-	const contentRef = useRef<HTMLDivElement>(null);
-	const [selectedText, setSelectedText] = useState("");
-	const [currentLine, setCurrentLine] = useState("");
-	const [showActionBar, setShowActionBar] = useState(false);
+	const { hasSelection, getCachedSelection } = useTextSelection();
 
 	useEffect(() => {
 		rpc.request("get-article", { id: Number(id) }).then(setArticle);
 	}, [id, rpc]);
 
-	function handleTextSelect() {
-		const selection = window.getSelection();
-		const text = selection?.toString().trim();
-
-		if (text && selection && contentRef.current && article) {
-			setSelectedText(text);
-
-			const range = selection.getRangeAt(0);
-			const preRange = document.createRange();
-			preRange.selectNodeContents(contentRef.current);
-			preRange.setEnd(range.startContainer, range.startOffset);
-
-			const preText = preRange.toString();
-			const lineStart = preText.lastIndexOf("\n") + 1;
-			const selectionEnd = preText.length + text.length;
-			const lineEnd = article.content.indexOf("\n", selectionEnd);
-			const end = lineEnd === -1 ? article.content.length : lineEnd;
-
-			const line = article.content.substring(lineStart, end);
-			const offsetInLine = preText.length - lineStart;
-			const markedLine =
-				line.substring(0, offsetInLine) +
-				"<mark>" + text + "</mark>" +
-				line.substring(offsetInLine + text.length);
-
-			setCurrentLine(markedLine);
-			setShowActionBar(true);
-		} else {
-			setShowActionBar(false);
-		}
-	}
-
 	function addNote(stripMarks: boolean) {
+		if (!article) return;
+		const result = getCachedSelection();
+		if (!result) return;
+
 		rpc.request("add-anki-note", {
-			front: stripMarks ? currentLine.replace(/<\/?mark>/g, "") : currentLine,
+			front: stripMarks ? result.line : result.markedLine,
 			back: "",
-			title: article!.title,
-			url: article!.url,
+			title: article.title,
+			url: article.url,
 			deckName: "English",
 			modelName: "@Basic",
 		});
@@ -84,27 +54,24 @@ function ReadArticle() {
 			</div>
 
 			{article && (
-				<div className={`flex-1 overflow-y-auto px-4 ${showActionBar ? "pb-16" : "pb-10"}`}>
+				<div className={`flex-1 overflow-y-auto px-4 ${hasSelection ? "pb-16" : "pb-10"}`}>
 					<div className="container mx-auto max-w-3xl">
 						<article className="bg-white rounded-xl shadow-xl p-8">
-							<div
-								ref={contentRef}
-								onMouseUp={handleTextSelect}
-								className="prose prose-lg max-w-none text-gray-700 whitespace-pre-wrap"
-							>
-								{article.content}
-							</div>
+					<div
+						className="prose prose-lg max-w-none text-gray-700"
+					>
+							{article.content.split("\n").map((line, i) => (
+								<p key={i}>{line}</p>
+							))}
+						</div>
 						</article>
 					</div>
 				</div>
 			)}
 
-			{showActionBar && (
+			{hasSelection && (
 				<div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 shadow-lg z-50">
-					<div className="container mx-auto max-w-3xl flex items-center justify-between">
-						<span className="text-sm text-gray-500 truncate max-w-md">
-							"{selectedText}"
-						</span>
+					<div className="container mx-auto max-w-3xl flex items-center justify-end">
 						<div className="flex gap-2">
 							<button
 								accessKey="s"
