@@ -2,5 +2,6 @@ import { Electroview } from "electrobun/view";
 import type { MyRPCSchema } from "../shared/rpcSchema";
 
 export const rpc = Electroview.defineRPC<MyRPCSchema>({
+	maxRequestTime: 120000,
 	handlers: { requests: {}, messages: {} },
 });

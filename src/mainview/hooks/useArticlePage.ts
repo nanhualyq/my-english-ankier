@@ -4,7 +4,14 @@ import { useRPC } from "../RPCContext";
 import { useTextSelection } from "./useTextSelection";
 import type { Article } from "../../shared/rpcSchema";
 
-export function useArticlePage() {
+interface UseArticlePageOptions {
+	deckName?: string;
+	modelName?: string;
+	listenMode?: boolean;
+}
+
+export function useArticlePage(options: UseArticlePageOptions = {}) {
+	const { deckName = "English", modelName = "@Basic", listenMode = false } = options;
 	const rpc = useRPC();
 	const { id } = useParams<{ id: string }>();
 	const [article, setArticle] = useState<Article | null>(null);
@@ -19,16 +26,24 @@ export function useArticlePage() {
 		const result = getCachedSelection();
 		if (!result) return;
 
-		const frontContent = stripMarks ? result.line : result.markedLine;
+		let frontContent: string;
+		if (stripMarks && listenMode) {
+			frontContent = "";
+		} else if (stripMarks) {
+			frontContent = result.line;
+		} else {
+			frontContent = result.markedLine;
+		}
+
 		const frontWithTimestamp = `${frontContent}<span style="display:none">${Date.now()}</span>`;
 
 		rpc.request("add-anki-note", {
 			front: frontWithTimestamp,
-			back: "",
+			back: listenMode ? (stripMarks ? result.line : result.text) : "",
 			title: article.title,
 			url: article.url,
-			deckName: "English",
-			modelName: "@Basic",
+			deckName: deckName,
+			modelName: modelName,
 		});
 	}
 

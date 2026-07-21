@@ -25,6 +25,7 @@ async function getMainViewUrl(): Promise<string> {
 const url = await getMainViewUrl();
 
 const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
+	maxRequestTime: 120000,
 	handlers: {
 		requests: {
 			"save-article": async (data) =>
@@ -63,6 +64,8 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 			},
 			"tts-generate": async ({ text, voice }) => {
 				try {
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 90_000);
 					const response = await fetch("http://localhost:8880/v1/audio/speech", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
@@ -73,7 +76,9 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 							response_format: "mp3",
 							stream: false,
 						}),
+						signal: controller.signal,
 					});
+					clearTimeout(timeoutId);
 					if (!response.ok) {
 						console.error("Kokoro TTS error:", response.status, response.statusText);
 						return { audioBase64: "" };

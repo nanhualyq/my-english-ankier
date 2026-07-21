@@ -50,6 +50,9 @@ function Home() {
 											<Link to={`/write-skill/${a.id}`} className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
 												Write
 											</Link>
+											<Link to={`/listen-article/${a.id}`} className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+												Listen
+											</Link>
 										</div>
 									</td>
 								</tr>
