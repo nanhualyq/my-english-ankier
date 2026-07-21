@@ -7,9 +7,10 @@ export function useTextSelection() {
 
 	useEffect(() => {
 		function handleSelectionChange() {
-			const text = window.getSelection()?.toString().trim();
-			setHasSelection(!!text);
-			cachedSelection.current = text ? getSelectedLine() : null;
+			const selection = window.getSelection();
+			const selected = !(selection?.isCollapsed ?? true);
+			setHasSelection(selected);
+			cachedSelection.current = selected ? getSelectedLine() : null;
 		}
 
 		document.addEventListener("selectionchange", handleSelectionChange);
