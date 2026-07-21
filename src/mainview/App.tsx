@@ -4,6 +4,7 @@ import AddArticle from "./pages/AddArticle";
 import EditArticle from "./pages/EditArticle";
 import ReadArticle from "./pages/ReadArticle";
 import ListenArticle from "./pages/ListenArticle";
+import SpeakArticle from "./pages/SpeakArticle";
 import WriteSkill from "./pages/WriteSkill";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
 			<Route path="/edit-article/:id" element={<EditArticle />} />
 			<Route path="/read-article/:id" element={<ReadArticle />} />
 			<Route path="/listen-article/:id" element={<ListenArticle />} />
+			<Route path="/speak-article/:id" element={<SpeakArticle />} />
 			<Route path="/write-skill/:id" element={<WriteSkill />} />
 		</Routes>
 	);

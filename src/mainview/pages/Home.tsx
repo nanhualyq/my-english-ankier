@@ -53,6 +53,9 @@ function Home() {
 											<Link to={`/listen-article/${a.id}`} className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
 												Listen
 											</Link>
+											<Link to={`/speak-article/${a.id}`} className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+												Speak
+											</Link>
 										</div>
 									</td>
 								</tr>
