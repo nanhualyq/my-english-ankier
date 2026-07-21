@@ -61,6 +61,31 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 					return { noteId: null };
 				}
 			},
+			"tts-generate": async ({ text, voice }) => {
+				try {
+					const response = await fetch("http://localhost:8880/v1/audio/speech", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							input: text,
+							model: "kokoro",
+							voice: voice ?? "af_heart",
+							response_format: "mp3",
+							stream: false,
+						}),
+					});
+					if (!response.ok) {
+						console.error("Kokoro TTS error:", response.status, response.statusText);
+						return { audioBase64: "" };
+					}
+					const arrayBuffer = await response.arrayBuffer();
+					const audioBase64 = Buffer.from(arrayBuffer).toString("base64");
+					return { audioBase64 };
+				} catch (err) {
+					console.error("Failed to connect to Kokoro TTS:", err);
+					return { audioBase64: "" };
+				}
+			},
 		},
 	},
 });

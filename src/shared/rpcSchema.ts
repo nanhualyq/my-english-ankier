@@ -34,6 +34,10 @@ export interface MyRPCSchema extends ElectrobunRPCSchema {
 				params: { front: string; back: string; title: string; url: string; deckName: string; modelName: string };
 				response: { noteId: number | null };
 			};
+			"tts-generate": {
+				params: { text: string; voice?: string };
+				response: { audioBase64: string };
+			};
 		};
 		messages: {};
 	};
