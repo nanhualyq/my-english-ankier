@@ -31,12 +31,12 @@ function WriteSkill() {
 
 			{article && (
 				<div className={`px-4 ${hasSelection ? "pb-16" : "pb-6"}`}>
-					<div className="prose prose-lg max-w-none text-gray-700">
+					<div className="prose prose-lg max-w-none text-gray-700 space-y-4">
 								{(() => {
 									const translatedLines = article.translated_content?.split("\n") ?? [];
 									const contentLines = article.content.split("\n");
 									return translatedLines.map((line, i) => (
-										<div key={i} className="mb-2">
+										<div key={i} className="space-y-2 border border-gray-200 rounded-lg p-3">
 											<p>{line}</p>
 											<details className="text-sm text-gray-500">
 												<summary className="cursor-pointer hover:text-gray-700">Show original</summary>

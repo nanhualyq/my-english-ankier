@@ -35,7 +35,7 @@ function SpeakArticle() {
 				<div className={`px-4 ${hasSelection ? "pb-16" : "pb-6"}`}>
 					<div className="prose prose-lg max-w-none text-gray-700 space-y-4">
 								{article.content.split("\n").map((line, i) => (
-								<div key={i} className="space-y-2">
+								<div key={i} className="space-y-2 border border-gray-200 rounded-lg p-3">
 									<p className="text-sm text-gray-500">{line}</p>
 									<TTSPlayer text={line} className="w-full" />
 								</div>
