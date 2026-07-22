@@ -1,4 +1,5 @@
 import { useArticlePage } from "../hooks/useArticlePage";
+import { ArticleInfo } from "../components/ArticleInfo";
 import { PageLayout } from "../components/PageLayout";
 import { SelectionToolbar } from "../components/SelectionToolbar";
 import { TTSPlayer } from "../components/TTSPlayer";
@@ -25,6 +26,10 @@ function SpeakArticle() {
 
 	return (
 		<PageLayout breadcrumbs={[{ label: "Articles", path: "/" }, { label: article?.title ?? "..." }]}>
+
+			{article && (
+				<ArticleInfo article={article} />
+			)}
 
 			{article && (
 				<div className={`px-4 ${hasSelection ? "pb-16" : "pb-6"}`}>

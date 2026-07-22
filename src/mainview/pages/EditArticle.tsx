@@ -19,7 +19,7 @@ function EditArticle() {
 	async function handleSubmit(data: ArticleFormData) {
 		await rpc.request("update-article", { id: Number(id), ...data });
 		setSubmitted(true);
-		setTimeout(() => navigate("/"), 1500);
+		setTimeout(() => navigate(-1), 1500);
 	}
 
 	return (
