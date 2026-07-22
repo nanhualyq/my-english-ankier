@@ -4,13 +4,14 @@ import { ArticleInfo } from "../components/ArticleInfo";
 import { PageLayout } from "../components/PageLayout";
 import { TTSPlayer } from "../components/TTSPlayer";
 import { hiddenTimestamp } from "../utils/anki";
+import { getSelectedLine } from "../utils/textSelection";
 
 function SpeakArticle() {
-	const { article, hasSelection, rpc, getCachedSelection } = useArticlePage();
+	const { article, hasSelection, rpc } = useArticlePage();
 
 	function addNote(isFullLine: boolean) {
 		if (!article) return;
-		const result = getCachedSelection();
+		const result = getSelectedLine();
 		if (!result) return;
 		const front = isFullLine ? result.line : result.markedLine;
 		const back = isFullLine ? result.line : result.text;

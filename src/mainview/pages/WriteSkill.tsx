@@ -3,13 +3,14 @@ import { useSelectionShortcuts } from "../hooks/useSelectionShortcuts";
 import { ArticleInfo } from "../components/ArticleInfo";
 import { PageLayout } from "../components/PageLayout";
 import { hiddenTimestamp } from "../utils/anki";
+import { getSelectedLine } from "../utils/textSelection";
 
 function WriteSkill() {
-	const { article, hasSelection, rpc, getCachedSelection } = useArticlePage();
+	const { article, hasSelection, rpc } = useArticlePage();
 
 	function addNote(isFullLine: boolean) {
 		if (!article) return;
-		const result = getCachedSelection();
+		const result = getSelectedLine();
 		if (!result) return;
 		const front = isFullLine ? result.line : result.markedLine;
 		rpc.request("add-anki-note", {

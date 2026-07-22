@@ -8,11 +8,11 @@ export function useArticlePage() {
 	const rpc = useRPC();
 	const { id } = useParams<{ id: string }>();
 	const [article, setArticle] = useState<Article | null>(null);
-	const { hasSelection, getCachedSelection } = useTextSelection();
+	const { hasSelection } = useTextSelection();
 
 	useEffect(() => {
 		rpc.request("get-article", { id: Number(id) }).then(setArticle);
 	}, [id, rpc]);
 
-	return { article, hasSelection, rpc, getCachedSelection };
+	return { article, hasSelection, rpc };
 }
