@@ -1,7 +1,7 @@
 import { useArticlePage } from "../hooks/useArticlePage";
+import { useSelectionShortcuts } from "../hooks/useSelectionShortcuts";
 import { ArticleInfo } from "../components/ArticleInfo";
 import { PageLayout } from "../components/PageLayout";
-import { SelectionToolbar } from "../components/SelectionToolbar";
 import { hiddenTimestamp } from "../utils/anki";
 
 function WriteSkill() {
@@ -22,6 +22,12 @@ function WriteSkill() {
 		});
 	}
 
+	useSelectionShortcuts({
+		hasSelection,
+		onAddWithMark: () => addNote(false),
+		onAddFullLine: () => addNote(true),
+	});
+
 	return (
 		<PageLayout breadcrumbs={[{ label: "Articles", path: "/" }, { label: article?.title ?? "..." }]}>
 
@@ -30,7 +36,7 @@ function WriteSkill() {
 			)}
 
 			{article && (
-				<div className={`px-4 ${hasSelection ? "pb-16" : "pb-6"}`}>
+				<div className="px-4 pb-6">
 					<div className="prose prose-lg max-w-none text-gray-700 space-y-4">
 								{(() => {
 									const translatedLines = article.translated_content?.split("\n") ?? [];
@@ -47,12 +53,6 @@ function WriteSkill() {
 								})()}
 					</div>
 				</div>
-			)}
-			{hasSelection && (
-				<SelectionToolbar
-					onAddWithMark={() => addNote(false)}
-					onAddFullLine={() => addNote(true)}
-				/>
 			)}
 		</PageLayout>
 	);

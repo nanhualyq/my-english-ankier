@@ -1,7 +1,7 @@
 import { useArticlePage } from "../hooks/useArticlePage";
+import { useSelectionShortcuts } from "../hooks/useSelectionShortcuts";
 import { ArticleInfo } from "../components/ArticleInfo";
 import { PageLayout } from "../components/PageLayout";
-import { SelectionToolbar } from "../components/SelectionToolbar";
 import { TTSPlayer } from "../components/TTSPlayer";
 import { hiddenTimestamp } from "../utils/anki";
 
@@ -24,6 +24,12 @@ function SpeakArticle() {
 		});
 	}
 
+	useSelectionShortcuts({
+		hasSelection,
+		onAddWithMark: () => addNote(false),
+		onAddFullLine: () => addNote(true),
+	});
+
 	return (
 		<PageLayout breadcrumbs={[{ label: "Articles", path: "/" }, { label: article?.title ?? "..." }]}>
 
@@ -32,7 +38,7 @@ function SpeakArticle() {
 			)}
 
 			{article && (
-				<div className={`px-4 ${hasSelection ? "pb-16" : "pb-6"}`}>
+				<div className="px-4 pb-6">
 					<div className="prose prose-lg max-w-none text-gray-700 space-y-4">
 								{article.content.split("\n").map((line, i) => (
 								<div key={i} className="space-y-2 border border-gray-200 rounded-lg p-3">
@@ -42,12 +48,6 @@ function SpeakArticle() {
 								))}
 					</div>
 				</div>
-			)}
-			{hasSelection && (
-				<SelectionToolbar
-					onAddWithMark={() => addNote(false)}
-					onAddFullLine={() => addNote(true)}
-				/>
 			)}
 		</PageLayout>
 	);
