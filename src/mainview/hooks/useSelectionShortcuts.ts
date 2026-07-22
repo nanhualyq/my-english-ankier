@@ -2,12 +2,10 @@ import { useEffect } from "react";
 
 export function useSelectionShortcuts({
 	hasSelection,
-	onAddWithMark,
-	onAddFullLine,
+	onAddNote,
 }: {
 	hasSelection: boolean;
-	onAddWithMark: () => void;
-	onAddFullLine: () => void;
+	onAddNote: () => void;
 }) {
 	useEffect(() => {
 		if (!hasSelection) return;
@@ -17,16 +15,13 @@ export function useSelectionShortcuts({
 			const tag = (e.target as HTMLElement).tagName;
 			if (tag === "INPUT" || tag === "TEXTAREA") return;
 
-			if (e.key === "s" || e.key === "S") {
+			if (e.key === "a" || e.key === "A") {
 				e.preventDefault();
-				onAddWithMark();
-			} else if (e.key === "f" || e.key === "F") {
-				e.preventDefault();
-				onAddFullLine();
+				onAddNote();
 			}
 		}
 
 		document.addEventListener("keydown", handleKeyDown);
 		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [hasSelection, onAddWithMark, onAddFullLine]);
+	}, [hasSelection, onAddNote]);
 }

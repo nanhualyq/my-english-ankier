@@ -9,10 +9,11 @@ import { getSelectedLine } from "../utils/textSelection";
 function SpeakArticle() {
 	const { article, hasSelection, rpc } = useArticlePage();
 
-	function addNote(isFullLine: boolean) {
+	function addNote() {
 		if (!article) return;
 		const result = getSelectedLine();
 		if (!result) return;
+		const isFullLine = result.text === result.line.trim();
 		const front = isFullLine ? result.line : result.markedLine;
 		const back = isFullLine ? result.line : result.text;
 		rpc.request("add-anki-note", {
@@ -25,11 +26,7 @@ function SpeakArticle() {
 		});
 	}
 
-	useSelectionShortcuts({
-		hasSelection,
-		onAddWithMark: () => addNote(false),
-		onAddFullLine: () => addNote(true),
-	});
+	useSelectionShortcuts({ hasSelection, onAddNote: addNote });
 
 	return (
 		<PageLayout breadcrumbs={[{ label: "Articles", path: "/" }, { label: article?.title ?? "..." }]}>

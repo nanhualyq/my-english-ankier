@@ -8,10 +8,11 @@ import { getSelectedLine } from "../utils/textSelection";
 function ReadArticle() {
 	const { article, hasSelection, rpc } = useArticlePage();
 
-	function addNote(isFullLine: boolean) {
+	function addNote() {
 		if (!article) return;
 		const result = getSelectedLine();
 		if (!result) return;
+		const isFullLine = result.text === result.line.trim();
 		const front = isFullLine ? result.line : result.markedLine;
 		rpc.request("add-anki-note", {
 			front: `${front}${hiddenTimestamp()}`,
@@ -23,11 +24,7 @@ function ReadArticle() {
 		});
 	}
 
-	useSelectionShortcuts({
-		hasSelection,
-		onAddWithMark: () => addNote(false),
-		onAddFullLine: () => addNote(true),
-	});
+	useSelectionShortcuts({ hasSelection, onAddNote: addNote });
 
 	return (
 		<PageLayout breadcrumbs={[{ label: "Articles", path: "/" }, { label: article?.title ?? "..." }]}>
