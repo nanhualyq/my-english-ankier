@@ -6,9 +6,12 @@ import ReadArticle from "./pages/ReadArticle";
 import ListenArticle from "./pages/ListenArticle";
 import SpeakArticle from "./pages/SpeakArticle";
 import WriteSkill from "./pages/WriteSkill";
+import DevRibbon from "./components/DevRibbon";
 
 function App() {
 	return (
+		<>
+		<DevRibbon />
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/add-article" element={<AddArticle />} />
@@ -18,6 +21,7 @@ function App() {
 			<Route path="/speak-article/:id" element={<SpeakArticle />} />
 			<Route path="/write-skill/:id" element={<WriteSkill />} />
 		</Routes>
+		</>
 	);
 }
 
