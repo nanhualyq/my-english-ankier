@@ -19,6 +19,7 @@ export default {
 		},
 		linux: {
 			bundleCEF: false,
+			icon: 'assets/cut.png'
 		},
 		win: {
 			bundleCEF: false,
