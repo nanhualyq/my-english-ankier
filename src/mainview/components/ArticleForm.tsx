@@ -47,7 +47,7 @@ function ArticleForm({
 					ref={titleRef}
 					type="text"
 					defaultValue={defaultTitle}
-					className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
+					className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
 					placeholder="Article title"
 				/>
 			</div>
@@ -59,7 +59,7 @@ function ArticleForm({
 					ref={urlRef}
 					type="url"
 					defaultValue={defaultUrl}
-					className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
+					className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
 					placeholder="https://example.com/article"
 				/>
 			</div>
@@ -70,7 +70,7 @@ function ArticleForm({
 				<textarea
 					ref={contentRef}
 					defaultValue={defaultContent}
-					className="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
+					className="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
 					placeholder="Paste article content here..."
 				/>
 			</div>
@@ -81,13 +81,13 @@ function ArticleForm({
 				<textarea
 					ref={translatedContentRef}
 					defaultValue={defaultTranslatedContent}
-					className="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
+					className="w-full h-48 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
 					placeholder="Paste translated content here (optional)..."
 				/>
 			</div>
 			<button
 				type="submit"
-				className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
+				className="px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors shadow-md"
 			>
 				{buttonText}
 			</button>

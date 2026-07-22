@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { PageLayout } from "../components/PageLayout";
 import { useRPC } from "../RPCContext";
 import ArticleForm from "../components/ArticleForm";
 import type { Article, ArticleFormData } from "../../shared/rpcSchema";
@@ -22,10 +23,8 @@ function EditArticle() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 text-gray-900">
-			<div className="container mx-auto px-4 py-10 max-w-3xl">
-				<h1 className="text-3xl font-bold text-white mb-6">Edit Article</h1>
-
+		<PageLayout breadcrumbs={[{ label: "Articles", path: "/" }, { label: "Edit Article" }]}>
+			<div className="px-4 py-6">
 				{submitted && (
 					<div className="bg-green-500 text-white px-4 py-3 rounded-lg mb-4 text-center font-medium">
 						Article updated!
@@ -43,7 +42,7 @@ function EditArticle() {
 					/>
 				)}
 			</div>
-		</div>
+		</PageLayout>
 	);
 }
 
