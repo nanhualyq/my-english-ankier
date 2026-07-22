@@ -12,7 +12,7 @@ function ListenArticle() {
 		if (!article) return;
 		const result = getCachedSelection();
 		if (!result) return;
-		const front = isFullLine ? "" : result.markedLine;
+		const front = isFullLine ? "" : result.markedLine.replace(/<mark>.*?<\/mark>/, "<mark>???</mark>");
 		const back = isFullLine ? result.line : result.text;
 		rpc.request("add-anki-note", {
 			front: `${front}${hiddenTimestamp()}`,
