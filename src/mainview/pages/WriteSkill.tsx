@@ -15,10 +15,12 @@ function WriteSkill() {
 		const isFullLine = result.text === result.line.trim();
 		const front = isFullLine ? result.line : result.markedLine;
 		rpc.request("add-anki-note", {
-			front: `${front}${hiddenTimestamp()}`,
-			back: "",
-			title: article.title,
-			url: article.url,
+			fields: {
+				Front: `${front}${hiddenTimestamp()}`,
+				Back: "",
+				Title: article.title,
+				Url: article.url,
+			},
 			deckName: "English",
 			modelName: "@Basic",
 		});

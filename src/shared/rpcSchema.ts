@@ -31,12 +31,16 @@ export interface MyRPCSchema extends ElectrobunRPCSchema {
 				response: void;
 			};
 			"add-anki-note": {
-				params: { front: string; back: string; title: string; url: string; deckName: string; modelName: string };
+				params: { fields: Record<string, string>; deckName: string; modelName: string };
 				response: { noteId: number | null };
 			};
 			"tts-generate": {
 				params: { text: string; voice?: string };
 				response: { audioBase64: string };
+			};
+			"lookup-word": {
+				params: { word: string };
+				response: Record<string, unknown>;
 			};
 		};
 		messages: {};

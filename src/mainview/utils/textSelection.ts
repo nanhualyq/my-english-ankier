@@ -12,6 +12,9 @@ export function getSelectedLine() {
 	if (!pElement) return null;
 
 	const line = pElement.textContent ?? "";
+	const lineIndex = pElement.dataset.lineIndex !== undefined
+		? parseInt(pElement.dataset.lineIndex, 10)
+		: undefined;
 
 	// Use Range API to get the character offset within the paragraph
 	const offsetRange = document.createRange();
@@ -24,5 +27,5 @@ export function getSelectedLine() {
 		"<mark>" + text + "</mark>" +
 		line.substring(offsetInLine + text.length);
 
-	return { text, line, markedLine };
+	return { text, line, markedLine, lineIndex };
 }

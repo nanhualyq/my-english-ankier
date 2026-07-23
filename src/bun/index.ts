@@ -34,7 +34,7 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 			"get-article": async ({ id }) => getArticle(id),
 			"update-article": async ({ id, ...data }) =>
 				updateArticle(id, data),
-			"add-anki-note": async ({ front, back, title, url, deckName, modelName }) => {
+			"add-anki-note": async ({ fields, deckName, modelName }) => {
 				try {
 					const response = await fetch("http://localhost:8765", {
 						method: "POST",
@@ -46,7 +46,7 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 								note: {
 									deckName,
 									modelName,
-									fields: { Front: front, Back: back, Title: title, Url: url },
+									fields,
 								},
 							},
 						}),
@@ -89,6 +89,35 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 				} catch (err) {
 					console.error("Failed to connect to Kokoro TTS:", err);
 					return { audioBase64: "" };
+				}
+			},
+			"lookup-word": async ({ word }) => {
+				try {
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 10_000);
+					const response = await fetch(
+						"https://dict.youdao.com/jsonapi_s?doctype=json&jsonversion=4",
+						{
+							method: "POST",
+							headers: {
+								"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
+								Accept: "application/json, text/plain, */*",
+								"Accept-Language": "en-US,zh-CN;q=0.9",
+								"Content-Type": "application/x-www-form-urlencoded",
+							},
+							body: `q=${encodeURIComponent(word)}&le=en&t=3&client=web&sign=3bafbe155f751d1a5071ae9f9bc879ea&keyfrom=webdict`,
+							signal: controller.signal,
+						},
+					);
+					clearTimeout(timeoutId);
+					if (!response.ok) {
+						console.error("Youdao API error:", response.status, response.statusText);
+						return {};
+					}
+					return (await response.json()) as Record<string, unknown>;
+				} catch (err) {
+					console.error("Failed to query Youdao dictionary:", err);
+					return {};
 				}
 			},
 		},

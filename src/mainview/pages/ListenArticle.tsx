@@ -5,22 +5,35 @@ import { PageLayout } from "../components/PageLayout";
 import { TTSPlayer } from "../components/TTSPlayer";
 import { hiddenTimestamp } from "../utils/anki";
 import { getSelectedLine } from "../utils/textSelection";
+import { lookupWord } from "../utils/dictionary";
 
 function ListenArticle() {
 	const { article, hasSelection, rpc } = useArticlePage();
 
-	function addNote() {
+	async function addNote() {
 		if (!article) return;
 		const result = getSelectedLine();
 		if (!result) return;
 		const isFullLine = result.text === result.line.trim();
 		const front = isFullLine ? "" : result.markedLine.replace(/<mark>.*?<\/mark>/, "<mark>???</mark>");
 		const back = isFullLine ? result.line : result.text;
+
+		let phone = "";
+		if (!isFullLine) {
+			const entry = await lookupWord(rpc, result.text);
+			if (entry && (entry.usphone || entry.ukphone)) {
+				phone = `US: /${entry.usphone}/ UK: /${entry.ukphone}/`;
+			}
+		}
+
 		rpc.request("add-anki-note", {
-			front: `${front}${hiddenTimestamp()}`,
-			back,
-			title: article.title,
-			url: article.url,
+			fields: {
+				Front: `${front}${hiddenTimestamp()}`,
+				Back: back,
+				Title: article.title,
+				Url: article.url,
+				Phone: phone,
+			},
 			deckName: "English",
 			modelName: "@EnListen",
 		});
