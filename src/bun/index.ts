@@ -105,7 +105,7 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 								"Accept-Language": "en-US,zh-CN;q=0.9",
 								"Content-Type": "application/x-www-form-urlencoded",
 							},
-							body: `q=${encodeURIComponent(word)}&le=en&t=3&client=web&sign=3bafbe155f751d1a5071ae9f9bc879ea&keyfrom=webdict`,
+						body: `q=${encodeURIComponent(word.toLowerCase())}&le=en&t=3&client=web&sign=3bafbe155f751d1a5071ae9f9bc879ea&keyfrom=webdict`,
 							signal: controller.signal,
 						},
 					);

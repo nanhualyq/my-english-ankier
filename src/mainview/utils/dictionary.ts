@@ -10,17 +10,19 @@ export interface DictionaryEntry {
 	definitions: Array<{ pos: string; meaning: string }>;
 }
 
-function formatYoudaoResponse(data: Record<string, unknown>): DictionaryEntry {
-	const word = (data.input as string) ?? "";
-	const ec = data.ec as {
-		word?: {
-			usphone?: string;
-			ukphone?: string;
-			trs?: Array<{ pos?: string; tran?: string }>;
-		};
-	} | undefined;
-	const entry = ec?.word;
+function formatYoudaoResponse(data: Record<string, unknown>, originalWord: string): DictionaryEntry {
+	const word = originalWord;
+	const ec = data.ec as
+		| {
+				word?: {
+					usphone?: string;
+					ukphone?: string;
+					trs?: Array<{ pos?: string; tran?: string }>;
+				};
+		  }
+		| undefined;
 
+	const entry = ec?.word;
 	const usphone = entry?.usphone ?? "";
 	const ukphone = entry?.ukphone ?? "";
 	const definitions: Array<{ pos: string; meaning: string }> = [];
@@ -44,7 +46,7 @@ export async function lookupWord(
 ): Promise<DictionaryEntry | null> {
 	try {
 		const result = await rpc.request("lookup-word", { word });
-		return formatYoudaoResponse(result);
+		return formatYoudaoResponse(result, word);
 	} catch (err) {
 		console.error("Dictionary lookup failed:", err);
 		alert(`Failed to look up "${word}". Please try again.`);
