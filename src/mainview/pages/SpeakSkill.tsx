@@ -7,7 +7,7 @@ import { hiddenTimestamp } from "../utils/anki";
 import { getSelectedLine } from "../utils/textSelection";
 import { lookupWord } from "../utils/dictionary";
 
-function ListenArticle() {
+function SpeakSkill() {
 	const { article, hasSelection, rpc } = useArticlePage();
 
 	async function addNote() {
@@ -15,7 +15,7 @@ function ListenArticle() {
 		const result = getSelectedLine();
 		if (!result) return;
 		const isFullLine = result.text === result.line.trim();
-		const front = isFullLine ? "" : result.markedLine.replace(/<mark>.*?<\/mark>/, "<mark>???</mark>");
+		const front = isFullLine ? result.line : result.markedLine;
 		const back = isFullLine ? result.line : result.text;
 
 		let phone = "";
@@ -35,7 +35,7 @@ function ListenArticle() {
 				Phone: phone,
 			},
 			deckName: "English",
-			modelName: "@EnListen",
+			modelName: "@EnSpeak",
 		});
 	}
 
@@ -51,15 +51,12 @@ function ListenArticle() {
 			{article && (
 				<div className="px-4 pb-6">
 					<div className="prose prose-lg max-w-none text-gray-700 space-y-4">
-					{article.content.split("\n").map((line, i) => (
-						<div key={i} className="space-y-2 border border-gray-200 rounded-lg p-3">
-							<TTSPlayer text={line} className="w-full" />
-							<details className="text-sm text-gray-500">
-								<summary className="cursor-pointer hover:text-gray-700">Show original</summary>
-								<p className="mt-1 pl-4 border-l-2 border-gray-200">{line}</p>
-							</details>
-						</div>
-					))}
+								{article.content.split("\n").map((line, i) => (
+								<div key={i} className="space-y-2 border border-gray-200 rounded-lg p-3">
+									<p className="text-sm text-gray-500">{line}</p>
+									<TTSPlayer text={line} className="w-full" />
+								</div>
+								))}
 					</div>
 				</div>
 			)}
@@ -67,4 +64,4 @@ function ListenArticle() {
 	);
 }
 
-export default ListenArticle;
+export default SpeakSkill;

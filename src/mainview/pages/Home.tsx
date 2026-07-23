@@ -44,16 +44,16 @@ function Home() {
 									<td className="px-6 py-4 text-sm text-gray-500">{a.created_at}</td>
 									<td className="px-6 py-4">
 										<div className="flex gap-2">
-												<Link to={`/read-article/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
+												<Link to={`/read-skill/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
 													Read
 												</Link>
 												<Link to={`/write-skill/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
 													Write
 												</Link>
-												<Link to={`/listen-article/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
+												<Link to={`/listen-skill/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
 													Listen
 												</Link>
-												<Link to={`/speak-article/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
+												<Link to={`/speak-skill/${a.id}`} className="text-primary-600 hover:text-primary-800 text-sm font-medium">
 													Speak
 												</Link>
 										</div>

@@ -36,7 +36,7 @@ Electrobun (NOT Electron) desktop app — Bun runtime, React 18, Tailwind CSS 3,
 | `/` | `Home.tsx` | Lists articles from DB |
 | `/add-article` | `AddArticle.tsx` | Form with title, url, content |
 | `/edit-article/:id` | `EditArticle.tsx` | Edit existing article |
-| `/read-article/:id` | `ReadArticle.tsx` | Read article with text selection for Anki card creation |
+| `/read-skill/:id` | `ReadSkill.tsx` | Read article with text selection for Anki card creation |
 
 ## Anki Integration
 
