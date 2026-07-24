@@ -96,16 +96,12 @@ const rpc = defineElectrobunRPC<MyRPCSchema, "bun">("bun", {
 					const controller = new AbortController();
 					const timeoutId = setTimeout(() => controller.abort(), 10_000);
 					const response = await fetch(
-						"https://dict.youdao.com/jsonapi_s?doctype=json&jsonversion=4",
+						`https://dict.youdao.com/jsonapi?q=${encodeURIComponent(word.toLowerCase())}&le=en`,
 						{
-							method: "POST",
 							headers: {
 								"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0",
 								Accept: "application/json, text/plain, */*",
-								"Accept-Language": "en-US,zh-CN;q=0.9",
-								"Content-Type": "application/x-www-form-urlencoded",
 							},
-						body: `q=${encodeURIComponent(word.toLowerCase())}&le=en&t=3&client=web&sign=3bafbe155f751d1a5071ae9f9bc879ea&keyfrom=webdict`,
 							signal: controller.signal,
 						},
 					);

@@ -14,25 +14,32 @@ function formatYoudaoResponse(data: Record<string, unknown>, originalWord: strin
 	const word = originalWord;
 	const ec = data.ec as
 		| {
-				word?: {
-					usphone?: string;
-					ukphone?: string;
-					trs?: Array<{ pos?: string; tran?: string }>;
-				};
+				word?:
+					| {
+							usphone?: string;
+							ukphone?: string;
+							trs?: Array<{ tr?: Array<{ l?: { i?: string[] } }> }>;
+					  }
+					| Array<{
+							usphone?: string;
+							ukphone?: string;
+							trs?: Array<{ tr?: Array<{ l?: { i?: string[] } }> }>;
+					  }>;
 		  }
 		| undefined;
 
-	const entry = ec?.word;
+	// word may be an object (old format) or an array (new format)
+	const entry = Array.isArray(ec?.word) ? ec.word[0] : ec?.word;
 	const usphone = entry?.usphone ?? "";
 	const ukphone = entry?.ukphone ?? "";
 	const definitions: Array<{ pos: string; meaning: string }> = [];
 
 	if (entry?.trs) {
 		for (const tr of entry.trs) {
-			if (tr.pos && tr.tran) {
-				definitions.push({ pos: tr.pos, meaning: tr.tran });
-			} else if (tr.tran) {
-				definitions.push({ pos: "", meaning: tr.tran });
+			// New format: { tr: [{ l: { i: ["n. xxx"] } }] }
+			const inner = tr.tr?.[0]?.l?.i?.[0];
+			if (inner) {
+				definitions.push({ pos: "", meaning: inner });
 			}
 		}
 	}
